@@ -280,3 +280,54 @@ bazel run //utils:snap_converter -- -s -i ${PWD}/wiki-Vote.txt -o <output file>
 #   make snap_converter
 #   ./snap_converter -s -i <input file> -o <output file>
 ```
+
+## Reproducing the Experiments in "An experimental evaluation of static k-center clustering algorithms on graphs"
+
+The implementations presented in the accompanying paper are integrated into GBBS and can be compiled using the standard GBBS build procedure described above.
+
+### Synthetic Graphs
+
+Synthetic graphs were generated according to the Erdős–Rényi model.
+
+Two generators were used:
+
+- the `graphgen` tool from the SNAP library
+- a self-made generator located at utils/simple_er_generator.cc // for large, dense instances where graphgen runs out of memory
+
+Weighted instances can be obtained from the generated unweighted CSR graphs using scripts/add_uniform_csr_weights.py
+
+which assigns uniformly distributed, positive integer edge weights.
+
+### Real-World Graphs
+
+The real-world datasets used in the paper originate from
+
+- Stanford Network Analysis Platform (SNAP)
+- The Network Repository
+- 9th DIMACS Shortest-Path Implementation Challenge
+
+If a dataset is already available as an (optionally weighted) edge list, it can be converted directly to the CSR format GBBS uses by using benchmarks/Converter/snap_converter.cc.
+
+Datasets distributed in other formats (e.g. GTFS or OpenStreetMap) can first be converted to weighted edge lists using the conversion scripts provided in scripts/
+
+before converting them to CSR.
+
+### Graph Preprocessing
+
+All datasets are preprocessed identically before running the benchmarks.
+
+The preprocessing removes
+
+- isolated vertices,
+- self-loops and
+- multi-edges.
+
+For weighted graphs, parallel edges are replaced by the minimum-weight edge.
+
+The preprocessing script is located at scripts/clean_csr_graph.py. The resulting graphs can be verified using scripts/csr_graph_external_stats.py and scripts/csr_weight_sample.py.
+
+### Running the Benchmarks
+
+After preprocessing, all benchmarks can be compiled and executed using the standard GBBS Bazel workflow.
+
+Algorithm-specific command-line flags are documented in the corresponding benchmark runner (`*.cc`) files.
