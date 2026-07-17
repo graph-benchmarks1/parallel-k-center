@@ -285,6 +285,13 @@ bazel run //utils:snap_converter -- -s -i ${PWD}/wiki-Vote.txt -o <output file>
 
 The implementations presented in the accompanying paper are integrated into GBBS and can be compiled using the standard GBBS build procedure described above.
 
+### Quick Overview of the Repository Structure
+
+- `benchmarks/` – benchmark implementations and runners
+- `gbbs/` – core GBBS graph algorithms and data structures
+- `scripts/` – graph preprocessing and conversion utilities
+- `utils/` – auxiliary tools, including graph generators
+
 ### Synthetic Graphs
 
 Synthetic graphs were generated according to the Erdős–Rényi model.
