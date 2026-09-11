@@ -6,6 +6,10 @@ set -euo pipefail
 # Current supported datasets:
 #   dblp
 #   youtube
+#   livejournal
+#   orkut
+#   twitter
+#   friendster
 #
 # The script is intentionally dataset-oriented so additional sources can be
 # added incrementally and tested independently.
@@ -33,8 +37,15 @@ set -euo pipefail
 usage() {
   cat <<'EOF'
 Usage:
-  ./artifact/scripts/prepare_real_datasets.sh dblp [options]
-  ./artifact/scripts/prepare_real_datasets.sh youtube [options]
+  ./artifact/scripts/prepare_real_datasets.sh <dataset> [options]
+
+Datasets:
+  dblp
+  youtube
+  livejournal
+  orkut
+  twitter
+  friendster
 
 Options:
   --force             Redownload/reprocess even if the final graph exists.
@@ -48,6 +59,8 @@ Options:
 Examples:
   ./artifact/scripts/prepare_real_datasets.sh dblp
   ./artifact/scripts/prepare_real_datasets.sh youtube
+  ./artifact/scripts/prepare_real_datasets.sh livejournal
+  ./artifact/scripts/prepare_real_datasets.sh orkut
 EOF
 }
 
@@ -60,7 +73,7 @@ DATASET="$1"
 shift
 
 case "${DATASET}" in
-  dblp|youtube)
+  dblp|youtube|livejournal|orkut|twitter|friendster)
     ;;
   -h|--help)
     usage
@@ -68,7 +81,7 @@ case "${DATASET}" in
     ;;
   *)
     echo "ERROR: unsupported dataset: ${DATASET}" >&2
-    echo "Currently supported: dblp, youtube" >&2
+    echo "Currently supported: dblp, youtube, livejournal, orkut, twitter, friendster" >&2
     exit 2
     ;;
 esac
@@ -352,12 +365,75 @@ prepare_youtube() {
     "2987624"
 }
 
+prepare_livejournal() {
+  prepare_snap_unweighted \
+    "livejournal" \
+    "LiveJournal" \
+    "https://snap.stanford.edu/data/bigdata/communities/com-lj.ungraph.txt.gz" \
+    "com-lj.ungraph.txt.gz" \
+    "com-lj.adj" \
+    "3997962" \
+    "34681189"
+}
+
+prepare_orkut() {
+  prepare_snap_unweighted \
+    "orkut" \
+    "Orkut" \
+    "https://snap.stanford.edu/data/bigdata/communities/com-orkut.ungraph.txt.gz" \
+    "com-orkut.ungraph.txt.gz" \
+    "com-orkut.adj" \
+    "3072441" \
+    "117185083"
+}
+
+prepare_friendster() {
+  prepare_snap_unweighted \
+    "friendster" \
+    "Friendster" \
+    "https://snap.stanford.edu/data/bigdata/communities/com-friendster.ungraph.txt.gz" \
+    "com-friendster.ungraph.txt.gz" \
+    "com-friendster.adj" \
+    "65608366" \
+    "1806067135"
+}
+
+prepare_twitter() {
+  echo "NOTE: SNAP twitter-2010 is a directed follower graph."
+  echo "      The artifact symmetrizes it because the k-center implementation"
+  echo "      operates on undirected graphs."
+  echo "      The expected post-symmetrization count below should be checked"
+  echo "      against the original experiment input before a full AE rebuild."
+  echo
+
+  prepare_snap_unweighted \
+    "twitter" \
+    "Twitter" \
+    "https://snap.stanford.edu/data/twitter-2010.txt.gz" \
+    "twitter-2010.txt.gz" \
+    "twitter-2010.adj" \
+    "41652230" \
+    "1202513046"
+}
+
 case "${DATASET}" in
   dblp)
     prepare_dblp
     ;;
   youtube)
     prepare_youtube
+    ;;
+  livejournal)
+    prepare_livejournal
+    ;;
+  orkut)
+    prepare_orkut
+    ;;
+  twitter)
+    prepare_twitter
+    ;;
+  friendster)
+    prepare_friendster
     ;;
 esac
 
