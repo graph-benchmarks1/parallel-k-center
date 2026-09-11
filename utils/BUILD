@@ -61,3 +61,8 @@ cc_binary(
     name = "simple_er_generator",
     srcs = ["simple_er_generator.cc"],
 )
+
+cc_binary(
+    name = "clean_csr_graph",
+    srcs = ["clean_csr_graph.cc"],
+)

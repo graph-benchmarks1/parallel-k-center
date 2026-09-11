@@ -32,7 +32,8 @@ bazel build -c opt \
   //benchmarks/Clustering/K-Center/AbboudMISr:AbboudMISr_main \
   //benchmarks/Clustering/K-Center/ThorupSimple:ThorupSimple_main \
   //utils:simple_er_generator \
-  //utils:snap_converter
+  //utils:snap_converter \
+  //utils:clean_csr_graph
 
 install_binary() {
   local source="$1"
@@ -53,6 +54,7 @@ install_binary bazel-bin/benchmarks/Clustering/K-Center/AbboudMISr/AbboudMISr_ma
 install_binary bazel-bin/benchmarks/Clustering/K-Center/ThorupSimple/ThorupSimple_main thorupsimple
 install_binary bazel-bin/utils/simple_er_generator simple-er-generator
 install_binary bazel-bin/utils/snap_converter snap-converter
+install_binary bazel-bin/utils/clean_csr_graph clean-csr-graph
 
 echo
 echo "Build complete. Installed binaries:"
