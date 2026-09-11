@@ -1,0 +1,37 @@
+# Version-control and editor metadata
+.git/
+.github/
+.gitmodules
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Bazel-generated files and caches
+bazel-*
+
+# Locally built artifact binaries and generated smoke data.
+# The container builds these from source itself.
+artifact/bin/
+artifact/data/
+artifact-results/
+
+# Real graph inputs can be very large and will later be downloaded/prepared by
+# the artifact pipeline rather than copied from the author's workstation.
+inputs/
+
+# Python/local build caches
+__pycache__/
+*.pyc
+.pytype/
+
+# Local development/documentation dependencies that are irrelevant to the AE
+node_modules/
+.docusaurus/
+
+# Common local archives/logs that should never inflate the build context
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.log
