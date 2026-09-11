@@ -26,3 +26,7 @@ inputs/
 # Local graph datasets
 inputs/*
 !inputs/.gitkeep
+
+artifact/bin/
+artifact/data/
+artifact-results/

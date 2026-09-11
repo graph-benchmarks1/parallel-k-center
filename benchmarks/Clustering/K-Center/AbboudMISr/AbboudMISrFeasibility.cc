@@ -41,7 +41,7 @@ double AbboudMISrFeasibility_runner(Graph& G, commandLine P) {
   std::cout << "### Application: AbboudMISrFeasibility" << std::endl;
   std::cout << "### Graph: " << P.getArgument(0) << std::endl;
   std::cout << "### Threads: "
-            << (single_core ? 1 : num_workers())
+            << parlay::num_workers()
             << std::endl;
   std::cout << "### Graph Type: "
             << (std::is_same<W, gbbs::empty>::value ? "unweighted" : "weighted")
