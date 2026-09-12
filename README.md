@@ -281,60 +281,614 @@ bazel run //utils:snap_converter -- -s -i ${PWD}/wiki-Vote.txt -o <output file>
 #   ./snap_converter -s -i <input file> -o <output file>
 ```
 
-## Reproducing the Experiments in "An experimental evaluation of static k-center clustering algorithms on graphs"
+## Reproducing the Experiments of An experimental evaluation of static k-center clustering algorithms on graphs
 
-The implementations presented in the accompanying paper are integrated into GBBS and can be compiled using the standard GBBS build procedure described above.
+This repository contains the artifact for the above mentioned paper.
 
-### Quick Overview of the Repository Structure
+The artifact provides an automated workflow for
 
-- `benchmarks/` – benchmark implementations and runners
-- `gbbs/` – core GBBS graph algorithms and data structures
-- `scripts/` – graph preprocessing and conversion utilities
-- `utils/` – auxiliary tools, including graph generators
+- building the four algorithms evaluated in the paper,
+- downloading/generating the required datasets,
+- preprocessing the graphs,
+- executing the experiments,
+- aggregating repeated runs,
+- generating corresponding plots
 
-### Synthetic Graphs
+The recommended way to evaluate the artifact is through the supplied Docker
+environment. The high-level commands described below are intended to be the
+main interface for artifact evaluation; it is not necessary to invoke Bazel or
+the individual benchmark binaries manually.
 
-Synthetic graphs were generated according to the Erdős–Rényi model.
+### Requirements
 
-Two generators were used:
+The recommended workflow requires
 
-- the `graphgen` tool from the SNAP library
-- a self-made generator located at utils/simple_er_generator.cc // for large, dense instances where graphgen runs out of memory
+- Docker,
+- Internet access for downloading the real-world datasets, and
+- sufficient disk space for the selected reproduction profile. (~300GB for the full experimental reproduction should be sufficient)
 
-Weighted instances can be obtained from the generated unweighted CSR graphs using scripts/add_uniform_csr_weights.py
+Large experiments may require substantial memory, disk space, and running time.
+For this reason, the artifact provides both manageable `light` profiles and
+the complete `full` reproduction.
 
-which assigns uniformly distributed, positive integer edge weights.
+### Quick Start
 
-### Real-World Graphs
+From the repository root, build the artifact image:
 
-The real-world datasets used in the paper originate from
+```bash
+docker build -f artifact/Dockerfile -t kcenter-ae .
+```
 
-- Stanford Network Analysis Platform (SNAP)
-- The Network Repository
-- 9th DIMACS Shortest-Path Implementation Challenge
+First run the smoke test:
 
-If a dataset is already available as an (optionally weighted) edge list, it can be converted directly to the CSR format GBBS uses by using benchmarks/Converter/snap_converter.cc.
+```bash
+docker run --rm kcenter-ae smoke
+```
 
-Datasets distributed in other formats (e.g. GTFS or OpenStreetMap) can first be converted to weighted edge lists using the conversion scripts provided in scripts/
+The smoke test runs small deterministic test instances and checks all four
+algorithms used in the paper:
 
-before converting them to CSR.
+- Gonzalez,
+- Approximate Gonzalez,
+- Abboud et al.,
+- Thorup.
 
-### Graph Preprocessing
+The smoke test is a functionality check and not a reproduction of
+the paper experiments.
 
-All datasets are preprocessed identically before running the benchmarks.
+### Persistent Dataset and Result Directories
 
-The preprocessing removes
+For actual reproduction runs, we recommend keeping generated/downloaded
+datasets and experiment results outside the container. This allows results to
+be inspected directly on the host and makes interrupted experiments resumable
+across separate Docker invocations.
 
-- isolated vertices,
-- self-loops and
-- multi-edges.
+Create the directories once:
 
-For weighted graphs, parallel edges are replaced by the minimum-weight edge.
+```bash
+mkdir -p inputs artifact-results
+```
 
-The preprocessing script is located at scripts/clean_csr_graph.py. The resulting graphs can be verified using scripts/csr_graph_external_stats.py and scripts/csr_weight_sample.py.
+Then mount them when running a reproduction profile:
 
-### Running the Benchmarks
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae <profile>
+```
 
-After preprocessing, all benchmarks can be compiled and executed using the standard GBBS Bazel workflow.
+In the commands below, `<profile>` is replaced by one of the reproduction
+profiles described in the next section.
 
-Algorithm-specific command-line flags are documented in the corresponding benchmark runner (`*.cc`) files.
+### Reproduction Profiles
+
+The artifact provides several high-level profiles so that evaluators can
+choose a reproduction scope appropriate for the available resources.
+
+#### Light Synthetic Reproduction
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae light_synthetic
+```
+
+This prepares the small synthetic instances and executes a manageable subset:
+
+- `n = 100,000`,
+- densities `rho = 4, 16`,
+- weighted and unweighted graphs,
+- graph-generation seeds `0,...,9`,
+- `k = 20, 200`,
+- all four algorithms,
+- 3 repetitions.
+
+This corresponds to **960 individual algorithm runs**.
+
+The selected configurations use the same algorithms, parameters, datasets,
+repetitions, and aggregation procedure as the corresponding subfigures in the paper.
+
+#### Light Real-World Reproduction
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae light_real
+```
+
+This downloads, prepares and evaluates three representative real-world
+datasets:
+
+- DBLP,
+- YouTube,
+- libimseti.
+
+Their `k` values and execution modes are those stated in the paper. The profile
+executes **141 individual algorithm runs**.
+
+#### Combined Light Reproduction
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae light
+```
+
+This runs `light_synthetic` followed by `light_real`, for a total of
+**1101 individual algorithm runs**.
+
+We recommend this profile as the main manageable reproduction of the artifact
+when the complete experiment suite is too expensive.
+
+#### Complete Synthetic Reproduction
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae full_synthetic
+```
+
+This prepares all synthetic datasets and executes the experiments of the paper.
+
+#### Complete Real-World Reproduction
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae full_real
+```
+
+This prepares all real-world datasets and executes the experiments of the paper.
+
+#### Complete Reproduction
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae full
+```
+
+This prepares all required datasets and executes the complete experimental sweep.
+
+**Warning:** This is only intended for machines with substantial memory, disk space, CPU resources, and available
+running time (multiple weeks). The `light` profiles are provided specifically to permit
+evaluation on more modest resources.
+
+### Resuming Interrupted Experiments
+
+Long-running experiments can be resumed with `--resume`. For example:
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae light_synthetic --resume
+```
+
+Dataset preparation is cache-aware, so datasets that have already been
+prepared are reused instead of being re-generated.
+
+For experiment execution, `--resume` preserves the existing `runs.tsv` and
+skips configurations already recorded with one of the terminal statuses
+
+```text
+OK
+TIMEOUT
+FAIL
+```
+
+while executing configurations that are still missing.
+
+Without `--resume`, an existing `runs.tsv` for the same experiment is
+intentionally replaced.
+
+### Experiment-to-Figure Mapping
+
+The complete artifact is divided into thirteen experiment specifications:
+
+| ID | Experiment | Paper output |
+|---|---|---|
+| P1 | Delta parameter study | Figure A.1 |
+| P2 | Approximate-Gonzalez epsilon study on synthetic graphs | Figure A.2 |
+| P3 | Approximate-Gonzalez epsilon study on real graphs | Figure A.3 |
+| P4 | Thorup rounds-per-phase study | Figure A.4 |
+| P5 | Parallel scaling on small synthetic graphs | Figure A.5 |
+| P6 | Parallel scaling on large synthetic graphs | Figure A.6 |
+| P7 | Parallel scaling on social networks | Figure 7.1 |
+| P8 | Parallel scaling on the USA-central road network | Figure 7.2 |
+| P9 | Full sweep on small synthetic graphs | Figures A.7 and A.8 |
+| P10 | Full sweep on large synthetic graphs | Figures A.9 and A.10 |
+| P11 | Full sweep on social networks | Figure 7.3 and Figure A.11 |
+| P12 | Full sweep on road networks | Figures 7.4 and 7.5 |
+| P13 | Full sweep on rating networks | Figures A.12 and A.13 |
+
+Each experiment has a frozen specification under
+
+```text
+artifact/experiments/specs/
+```
+
+containing the parameters used for the paper experiments.
+
+### Running an Individual Paper Experiment
+
+An individual frozen experiment can be executed with
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae experiment <experiment-id>
+```
+
+For example:
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  kcenter-ae experiment p9_full_sweep_small_synthetic
+```
+
+The available experiment IDs are:
+
+```text
+p1_delta
+p2_approx_epsilon_synthetic
+p3_approx_epsilon_real
+p4_thorup_rpp
+p5_parallel_small_synthetic
+p6_parallel_large_synthetic
+p7_parallel_social
+p8_parallel_road
+p9_full_sweep_small_synthetic
+p10_full_sweep_large_synthetic
+p11_full_sweep_social
+p12_full_sweep_roads
+p13_full_sweep_ratings
+```
+
+The `experiment` mode uses the frozen paper specification.
+
+Note that running an individual experiment directly assumes that its required
+datasets have already been prepared.
+
+### Experiment Batches
+
+Related experiments can also be executed as batches to further simplify to reproduce the papers results:
+
+```bash
+docker run --rm ... kcenter-ae batch parameter_choices [--dry-run] [--resume]
+docker run --rm ... kcenter-ae batch parallel_scaling [--dry-run] [--resume]
+docker run --rm ... kcenter-ae batch full_sweep_synthetic [--dry-run] [--resume]
+docker run --rm ... kcenter-ae batch full_sweep_real [--dry-run] [--resume]
+```
+
+As with individual experiments, the datasets required by a batch must already
+be prepared.
+
+### Custom Experiments
+
+The same execution engine can be used for smaller or modified experiments
+without changing the frozen paper specifications.
+
+Use
+
+```text
+custom <experiment-id>
+```
+
+as the artifact command and provide the desired overrides as environment
+variables using Docker's `-e` option.
+
+Supported overrides are:
+
+```text
+REPETITIONS
+BASE_SEED
+TIMEOUT_SECONDS
+THREAD_POINTS
+THREAD_COUNTS
+K_VALUES
+DELTA_VALUES
+EPSILON_VALUES
+RPP_VALUES
+ALGORITHMS
+DATASETS
+RESULTS_DIR
+```
+
+For example, to execute only one repetition of experiment P9 on a particular graph:
+
+```bash
+docker run --rm \
+  --mount type=bind,src="$PWD/inputs",dst=/artifact/inputs \
+  --mount type=bind,src="$PWD/artifact-results",dst=/artifact/artifact-results \
+  -e REPETITIONS=1 \
+  -e DATASETS='er_n100000_d16_seed0_w.adj' \
+  kcenter-ae custom p9_full_sweep_small_synthetic
+```
+
+Custom mode changes only the requested dimensions; all remaining settings are
+inherited from the corresponding paper specification.
+
+Custom runs are stored separately from official paper runs unless
+`RESULTS_DIR` is explicitly overridden.
+
+#### Synthetic Graphs
+
+The synthetic experiments use Erdős--Rényi graphs generated by the supplied
+
+```text
+utils/simple_er_generator.cc
+```
+
+utility.
+
+The preparation pipeline is
+
+```text
+simple-er-generator
+  -> edge lists
+  -> snap-converter (provided by GBBS)
+  -> temporary GBBS adjacency graph
+  -> clean-csr-graph (our preprocessing described in the paper)
+  -> experiment-ready graph
+```
+
+The small synthetic collection uses
+
+- `n = 100,000`,
+- `rho = m/n` in `{2,4,8,16,32,64}`,
+- graph seeds `0,...,9`,
+- weighted and unweighted variants.
+
+The large collection uses
+
+- `n = 10,000,000`,
+- the same six densities,
+- graph seed `0`,
+- weighted and unweighted variants.
+
+Weighted synthetic edges receive uniformly distributed positive integer
+weights from `1` to `10000`.
+
+The `n` and `m = n * rho` values are generation parameters. Isolated
+vertices are removed during common preprocessing, so the final number of
+vertices can be slightly smaller.
+
+#### Real-World Graphs
+
+The artifact prepares the following real-world datasets:
+
+- DBLP
+- YouTube
+- LiveJournal
+- Orkut
+- Twitter
+- Friendster
+- USA-central road network
+- USA-full road network
+- libimseti
+- MovieLens
+- Yahoo Song
+
+The dataset-specific download URLs, transformations, expected graph sizes, and
+validation checks are encoded in
+
+```text
+artifact/scripts/prepare_real_datasets.sh
+```
+
+The principal sources are SNAP, the 9th DIMACS Shortest-Path Implementation
+Challenge, KONECT and the Network Repository.
+
+Each prepared real-world graph is validated against its expected post-cleanup
+vertex and edge counts before being used by the artifact.
+
+#### Rating Network weight transformations
+
+For the rating networks, larger ratings are transformed into smaller positive
+edge weights before common graph cleanup.
+
+The transformations used by the artifact are
+
+```text
+libimseti: w = 11  - r
+MovieLens: w = 11  - 2r
+Yahoo Song: w = 101 - r
+```
+
+where `r` denotes the original rating.
+
+MovieLens and Yahoo Song are bipartite networks. Their two vertex namespaces
+are kept disjoint during conversion before the resulting graph is compactly
+renumbered by the common preprocessing step.
+
+The exact transformation procedures are implemented in
+
+```text
+artifact/scripts/prepare_real_datasets.sh
+scripts/rating_weights_to_distances.py
+```
+
+### Common Graph Preprocessing
+
+All experiment graphs are converted to symmetric GBBS adjacency graphs and
+passed through the common cleaner.
+
+Preprocessing
+
+- removes self-loops,
+- removes isolated vertices,
+- removes duplicate/parallel edges,
+- renumbers the remaining vertices compactly, and
+- produces sorted symmetric adjacency lists.
+
+For weighted graphs, duplicate edges retain the minimum weight.
+
+The common cleaner is implemented in
+
+```text
+utils/clean_csr_graph.cc
+```
+
+and is invoked automatically by the dataset-preparation scripts.
+
+### Repetitions, Random Seeds, and Timeouts
+
+The main paper experiments use **3 repetitions** for each fixed experiment
+configuration.
+
+The parameter-choice experiments P1--P4 use **1 repetition** by default.
+
+Algorithm seeds are deterministic:
+
+```text
+seed(repetition) = 42 + repetition - 1
+```
+
+Thus the three main-experiment repetitions use seeds `42`, `43`, and `44`.
+
+The graph-generation seed and algorithm seed are separate. In particular,
+the ten small synthetic graph instances use graph-generation seeds `0,...,9`,
+while repeated executions of an algorithm use the algorithm seeds above.
+
+Each individual algorithm run has a timeout of **10800 seconds (3 hours)**.
+A timeout is recorded in the result table rather than aborting the complete
+experiment family.
+
+### Aggregation
+
+For ordinary experiments, reported values are medians over the repetitions of
+a fixed experiment configuration.
+
+For the small synthetic experiments that use ten independently generated
+graphs, aggregation is hierarchical:
+
+1. compute the median over repetitions for each fixed generated graph;
+2. compute the median of those per-graph medians over the ten graph seeds.
+
+### Results and Generated Figures
+
+Each experiment stores its raw and processed results below
+
+```text
+artifact-results/
+```
+
+Official individual paper experiments use
+
+```text
+artifact-results/experiments/<experiment-id>/
+```
+
+and the high-level light profiles use directories below
+
+```text
+artifact-results/profiles/
+```
+
+The main per-run table is
+
+```text
+runs.tsv
+```
+
+and records information including
+
+- graph and graph type,
+- algorithm,
+- `k`,
+- execution mode,
+- thread count,
+- algorithm parameters,
+- repetition and seed,
+- running time,
+- number of centers,
+- solution radius,
+- unreachable-vertex count,
+- timeout/failure status, and
+- raw-log location.
+
+Raw output from individual algorithm executions is retained below
+
+```text
+raw/
+```
+
+Postprocessing creates files below
+
+```text
+summary/
+```
+
+including, where applicable,
+
+```text
+per_graph.tsv
+aggregated.tsv
+paper_results.tsv
+```
+
+as well as the reconstructed figures.
+
+Figures are generated in both PDF and PNG format.
+
+For experiments requiring solution-quality comparisons, the paper-facing
+results express solution radius relative to Gonzalez on the same graph and
+`k`.
+
+For P10 and P11, the paper-facing derivation also selects the faster usable
+Abboud execution mode when both single-core and parallel measurements are
+present, matching the comparison used for the paper.
+
+### Parallel and Single-Core Runs
+
+Parallel experiment points set the number of Parlay workers through
+`PARLAY_NUM_THREADS`.
+
+Single-core experiment points use the algorithms' explicit single-core mode
+and set
+
+```text
+PARLAY_NUM_THREADS=1
+```
+
+They are therefore executions of the sequential implementation path rather
+than parallel runs with an unrestricted worker pool.
+
+### Direct Use Without Docker
+
+The artifact scripts can also be executed directly on a compatible Linux
+system. For example:
+
+```bash
+./artifact/run.sh build
+./artifact/run.sh smoke
+./artifact/run.sh light_synthetic
+./artifact/run.sh light_real
+./artifact/run.sh light
+```
+
+However, Docker is the recommended evaluation environment because it provides
+the software versions and dependencies used by the artifact automatically.
+
+The complete host-side command reference is available with
+
+```bash
+./artifact/run.sh help
+```
+
+and the corresponding Docker command is
+
+```bash
+docker run --rm kcenter-ae help
+```
