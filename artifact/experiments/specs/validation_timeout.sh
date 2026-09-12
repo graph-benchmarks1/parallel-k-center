@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Internal artifact validation spec: forced timeout.
+# Not part of any paper batch.
+
+EXPERIMENT_ID="validation_timeout"
+DESCRIPTION="Internal validation: force one run to time out"
+
+REPETITIONS=1
+BASE_SEED=42
+TIMEOUT_SECONDS=0.000001
+GBBS_INTERNAL_ROUNDS=1
+NB=128
+
+THREAD_POINTS=(4)
+ALGORITHMS=(gonzalez)
+
+FIXED_DELTA_WEIGHTED=8
+FIXED_DELTA_UNWEIGHTED=""
+FIXED_APPROX_EPSILON=0.001
+
+THORUP_SHRINK=2
+THORUP_LAMBDA=1
+FIXED_THORUP_RPP=4
+
+ALGORITHM_SWEEP_gonzalez="none"
+
+GRAPH_CASES=(
+  "_ae_validation/er_n1000_d2_seed0.adj|unweighted|10|1000"
+)

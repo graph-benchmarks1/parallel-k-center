@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       git \
       make \
       python3 \
+      python3-matplotlib \
       python3-pip \
       unzip \
       zip \
@@ -48,8 +49,8 @@ COPY . /artifact
 # so the reviewer-facing smoke run should only need a fast cached rebuild.
 RUN ./artifact/build.sh
 
-# run.sh is the single user-facing entry point.  At this milestone it supports
-# build/smoke/smoke-no-build; light/full/custom will be added on top of the same
-# interface once the real experiment driver exists.
+# run.sh is the single user-facing entry point for building, validation,
+# dataset preparation, paper-reproduction profiles, individual experiments,
+# batches, custom runs, aggregation, derivation, and plotting.
 ENTRYPOINT ["/artifact/artifact/run.sh"]
 CMD ["help"]
