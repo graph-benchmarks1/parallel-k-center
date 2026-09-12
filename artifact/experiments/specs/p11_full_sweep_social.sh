@@ -1,15 +1,4 @@
 #!/usr/bin/env bash
-# Figures 7.3 and A.11: full sweep on the six social-network instances.
-#
-# Figure 7.3 reports running time and Figure A.11 reports solution quality from
-# the same executions.  Gonzalez, Approximate Gonzalez, and Simplified Thorup
-# use 64-thread parallel execution. Abboud MIS is executed both single-core and
-# with 64 threads; plotting/aggregation chooses the faster completed Abboud
-# result for each graph/k configuration.
-#
-# The largest k point is defined literally as floor(sqrt(n)) and is resolved
-# from the actual prepared graph header at execution time. The fourth field in
-# each GRAPH_CASE is only an n hint so dry-runs can show the concrete k value.
 
 EXPERIMENT_ID="p11_full_sweep_social"
 DESCRIPTION="Figures 7.3/A.11: Full sweep on social-network graphs"

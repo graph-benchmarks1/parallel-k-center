@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Internal artifact validation spec: forced non-timeout failure.
-# Not part of any paper batch.
 
 EXPERIMENT_ID="validation_fail"
 DESCRIPTION="Internal validation: force one run to fail on malformed graph input"

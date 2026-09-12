@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-# Internal artifact validation spec.
-#
-# This is NOT a paper experiment and is deliberately excluded from every
-# experiment batch. It exists only to exercise the generic experiment runner,
-# raw-log capture, and TSV parsing end-to-end on a tiny graph.
 
 EXPERIMENT_ID="validation_runner_parser"
 DESCRIPTION="Internal validation: all four paper algorithms through generic runner/parser"

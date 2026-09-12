@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Figure 7.1: parallel scaling on social networks.
 
 EXPERIMENT_ID="p7_parallel_social"
 DESCRIPTION="Figure 7.1: Parallel scaling on LiveJournal, YouTube, and Orkut"

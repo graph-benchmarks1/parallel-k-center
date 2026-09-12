@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Figure A.6: parallel scaling on large synthetic graphs.
-# One graph seed per density/type; each configuration has 3 repetitions.
 
 EXPERIMENT_ID="p6_parallel_large_synthetic"
 DESCRIPTION="Figure A.6: Parallel scaling on large synthetic graphs"

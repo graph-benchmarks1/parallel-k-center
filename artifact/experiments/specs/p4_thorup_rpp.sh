@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Figure A.4 / Appendix A.6.3: Simplified Thorup rounds-per-phase study.
-# Thorup epsilon=1 corresponds to shrink=2.
 
 EXPERIMENT_ID="p4_thorup_rpp"
 DESCRIPTION="Figure A.4: Simplified Thorup rounds-per-phase parameter choice"

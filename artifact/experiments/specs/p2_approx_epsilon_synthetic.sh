@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Figure A.2 / Appendix A.6.2: Approximate Gonzalez epsilon on synthetic data.
 
 EXPERIMENT_ID="p2_approx_epsilon_synthetic"
 DESCRIPTION="Figure A.2: Approximate Gonzalez epsilon on weighted synthetic graph"

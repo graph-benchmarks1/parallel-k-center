@@ -21,35 +21,6 @@ set -euo pipefail
 #         ├── er_n10000000_d2_seed0_w.adj
 #         └── ...
 #
-# Pipeline:
-#   simple-er-generator
-#       -> raw edge lists
-#       -> snap-converter
-#       -> temporary GBBS graph
-#       -> clean-csr-graph
-#       -> final experiment-ready .adj graph
-#
-# Profiles:
-#
-#   test
-#       One tiny pair (weighted + unweighted), n=1000, d=2, seed=0.
-#       By default this goes to artifact/data/synthetic-prep-test/ rather
-#       than inputs/, so it does not pollute the official dataset tree.
-#
-#   light_synthetic
-#       All 120 small graphs:
-#       n=100,000; d in {2,4,8,16,32,64}; seeds 0..9;
-#       weighted + unweighted.
-#
-#   full_synthetic
-#       light_synthetic plus all 12 large graphs:
-#       n=10,000,000; d in {2,4,8,16,32,64}; seed 0;
-#       weighted + unweighted.
-#
-# The nominal n and m=n*d are GENERATION parameters. After common cleanup,
-# final n may be smaller because isolated vertices are removed. The generator
-# itself creates distinct non-self-loop undirected edges, so final undirected
-# edge count is normally unchanged by cleanup.
 
 usage() {
   cat <<'EOF'

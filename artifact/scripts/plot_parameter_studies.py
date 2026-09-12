@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""
-Reconstruct parameter-choice Figures A.1--A.4.
-
-Inputs:
-  P1, P4: summary/aggregated.tsv
-  P2, P3: summary/paper_results.tsv (for Gonzalez-relative quality)
-
-This plotting layer does not recompute experiment statistics.
-"""
 
 from __future__ import annotations
 

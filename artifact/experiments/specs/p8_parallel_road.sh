@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Figure 7.2: parallel scaling on USA-central.
-# Parallel points stop at 32 threads because parallel execution was already
-# slower than the true single-core implementation.
 
 EXPERIMENT_ID="p8_parallel_road"
 DESCRIPTION="Figure 7.2: Parallel scaling on the USA-central road network"

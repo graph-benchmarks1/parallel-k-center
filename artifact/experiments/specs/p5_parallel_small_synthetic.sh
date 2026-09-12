@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# Figure A.5: parallel scaling on small synthetic graphs.
-# For each density/type, all 10 graph seeds are executed.
-# Each graph/algorithm/k/execution-point configuration has 3 repetitions.
-# Plot aggregation averages over repetitions and over the 10 graph seeds.
 
 EXPERIMENT_ID="p5_parallel_small_synthetic"
 DESCRIPTION="Figure A.5: Parallel scaling on small synthetic graphs"

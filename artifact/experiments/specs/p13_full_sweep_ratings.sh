@@ -1,13 +1,4 @@
 #!/usr/bin/env bash
-# Figures A.12 and A.13: full sweep on the three rating-network instances.
-#
-# The submitted paper states that all algorithms use parallel execution with
-# 64 threads for this family. Runtime and solution quality come from the same
-# executions.
-#
-# The final k point is defined literally as floor(sqrt(n)) and is resolved
-# from the actual prepared graph header at execution time. The fourth field
-# in each GRAPH_CASE is only an n hint for concrete dry-run output.
 
 EXPERIMENT_ID="p13_full_sweep_ratings"
 DESCRIPTION="Figures A.12/A.13: Full sweep on rating-network graphs"

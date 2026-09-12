@@ -1,23 +1,4 @@
 #!/usr/bin/env python3
-"""
-Create paper-facing derived results from aggregated experiment output.
-
-Currently this layer performs two transformations used by the submitted paper:
-
-1. For P10 (large synthetic) and P11 (social networks), Abboud MIS was run in
-   both parallel and single-core mode.  The paper reports, for each graph/k
-   point, the faster of the two modes.  We therefore keep exactly one Abboud
-   row per point, preferring a usable completed result over timeout/failure and
-   otherwise comparing the aggregated median running times.
-
-2. For solution-quality experiments, report each algorithm's k-center radius
-   relative to Gonzalez on the same graph and k:
-       relative_radius = algorithm_radius / gonzalez_radius
-   Thus Gonzalez is 1.0, values below 1.0 are better, and values above 1.0 are
-   worse.
-
-The input must be summary/aggregated.tsv produced by aggregate_results.py.
-"""
 
 from __future__ import annotations
 

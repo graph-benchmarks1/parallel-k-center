@@ -15,29 +15,6 @@ set -euo pipefail
 #   libimseti
 #   movielens
 #   yahoo-song
-#
-# The script is intentionally dataset-oriented so additional sources can be
-# added incrementally and tested independently.
-#
-# Common pipeline for edge-list datasets:
-#
-#   download raw archive
-#       -> decompress/extract
-#       -> source-specific normalization if needed
-#       -> snap-converter
-#       -> clean-csr-graph
-#       -> validate expected post-cleanup statistics
-#       -> install into inputs/
-#
-# DBLP source:
-#   https://snap.stanford.edu/data/com-DBLP.html
-# Raw graph:
-#   https://snap.stanford.edu/data/bigdata/communities/com-dblp.ungraph.txt.gz
-#
-# Expected post-cleanup graph:
-#   n = 317080
-#   undirected m = 1049866
-#   GBBS symmetric adjacency entries = 2099732
 
 usage() {
   cat <<'EOF'

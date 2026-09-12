@@ -1,10 +1,5 @@
-# ALENEX artifact-evaluation container for the parallel k-center experiments.
-#
 # Build from the repository root with:
 #   docker build -f artifact/Dockerfile -t kcenter-ae .
-#
-# Then run the smoke test with:
-#   docker run --rm kcenter-ae smoke
 
 FROM ubuntu:22.04
 
@@ -40,17 +35,9 @@ RUN curl -fsSL \
 
 WORKDIR /artifact
 
-# The .dockerignore file keeps generated files, local datasets, results, and
-# repository metadata out of the Docker build context.
 COPY . /artifact
 
-# Fail the image build immediately if the repository cannot be compiled in the
-# clean container.  This also downloads/caches Bazel dependencies in the image,
-# so the reviewer-facing smoke run should only need a fast cached rebuild.
 RUN ./artifact/build.sh
 
-# run.sh is the single user-facing entry point for building, validation,
-# dataset preparation, paper-reproduction profiles, individual experiments,
-# batches, custom runs, aggregation, derivation, and plotting.
 ENTRYPOINT ["/artifact/artifact/run.sh"]
 CMD ["help"]

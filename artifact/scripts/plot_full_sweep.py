@@ -1,18 +1,4 @@
 #!/usr/bin/env python3
-"""
-Reconstruct the full-sweep runtime/quality figures from paper_results.tsv.
-
-Supported experiment families:
-  P9  -> Figures A.7 / A.8   (small synthetic)
-  P10 -> Figures A.9 / A.10  (large synthetic)
-  P11 -> Figures 7.3 / A.11  (social networks)
-  P12 -> Figures 7.4 / 7.5   (road networks)
-  P13 -> Figures A.12 / A.13 (rating networks)
-
-The plotting stage consumes only paper_results.tsv. It does not recompute
-medians or select Abboud modes; those decisions belong to the earlier
-aggregation/derivation layers.
-"""
 
 from __future__ import annotations
 

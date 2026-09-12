@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
-"""
-Reconstruct parallel-scaling Figures A.5, A.6, 7.1, and 7.2.
-
-Input:
-  summary/aggregated.tsv
-
-The aggregation layer has already applied:
-- ordinary median over repetitions for P6--P8;
-- hierarchical median (per graph seed, then across seeds) for P5.
-
-This plotting layer consumes those aggregated values only.
-"""
 
 from __future__ import annotations
 

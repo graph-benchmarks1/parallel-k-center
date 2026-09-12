@@ -30,7 +30,6 @@ for binary in "${required_binaries[@]}"; do
   fi
 done
 
-# Smoke tests must never accidentally validate stale output from an earlier run.
 rm -rf "${RESULTS_DIR}" "${DATA_DIR}"
 mkdir -p "${RESULTS_DIR}/raw" "${DATA_DIR}"
 

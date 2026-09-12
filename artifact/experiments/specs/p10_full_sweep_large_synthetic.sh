@@ -1,17 +1,4 @@
 #!/usr/bin/env bash
-# Figures A.9 and A.10: full sweep on large synthetic graphs.
-#
-# All six densities and both graph types are tested using the one large graph
-# seed (seed0) for each density/type.  Every individual configuration is
-# repeated three times.
-#
-# Gonzalez, Approximate Gonzalez, and Simplified Thorup use 64-thread parallel
-# execution.  Abboud MIS is executed both single-core and with 64 threads; the
-# aggregation/plotting stage chooses the faster completed Abboud result at each
-# graph/k configuration, as in Figure A.9.
-#
-# Figure A.10 omits rho=2 from the quality plot because those instances yielded
-# infinite radii, but rho=2 is still part of the executed full sweep.
 
 EXPERIMENT_ID="p10_full_sweep_large_synthetic"
 DESCRIPTION="Figures A.9/A.10: Full sweep on large synthetic graphs"

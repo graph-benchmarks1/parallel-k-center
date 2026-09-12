@@ -1,13 +1,4 @@
 #!/usr/bin/env bash
-# Figures 7.4 and 7.5: full sweep on the two road-network instances.
-#
-# The submitted paper states that all algorithms use single-core execution
-# for the road-network full sweep. Runtime and solution quality come from the
-# same runs.
-#
-# IMPORTANT: the final k values are the literal values used in the submitted
-# Figures 7.4/7.5: 3700 for USA-central and 5200 for USA-full.  They are not
-# recomputed from the current prepared-graph vertex counts.
 
 EXPERIMENT_ID="p12_full_sweep_roads"
 DESCRIPTION="Figures 7.4/7.5: Full sweep on road-network graphs"

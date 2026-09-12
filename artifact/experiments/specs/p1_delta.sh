@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Figure A.1 / Appendix A.6.1: Delta-stepping parameter choice.
-# Archived experiment evidence shows epsilon=0.1 for Approximate Gonzalez here.
 
 EXPERIMENT_ID="p1_delta"
 DESCRIPTION="Figure A.1: Delta-stepping bucket-width parameter choice"

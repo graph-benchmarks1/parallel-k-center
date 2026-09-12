@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Figure A.3 / Appendix A.6.2: Approximate Gonzalez epsilon on real-world data.
-# The submitted figure compares epsilon=0.001 and epsilon=0.5.
 
 EXPERIMENT_ID="p3_approx_epsilon_real"
 DESCRIPTION="Figure A.3: Approximate Gonzalez epsilon on real-world graphs"

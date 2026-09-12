@@ -1,13 +1,4 @@
 #!/usr/bin/env bash
-# Figures A.7 and A.8: full sweep on small synthetic graphs.
-#
-# All six densities and both graph types are tested.  For every density/type,
-# all ten independently generated graph seeds are included.  Every individual
-# configuration is repeated three times.
-#
-# Figure A.7 reports running time and Figure A.8 reports solution quality from
-# these same executions.  The paper uses single-core execution for all four
-# algorithms on graphs of this size.
 
 EXPERIMENT_ID="p9_full_sweep_small_synthetic"
 DESCRIPTION="Figures A.7/A.8: Full sweep on small synthetic graphs"

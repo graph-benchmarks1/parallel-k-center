@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Reconstruct submitted-paper road-network Figures 7.4 and 7.5."""
 
 from __future__ import annotations
 

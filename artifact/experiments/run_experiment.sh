@@ -107,7 +107,6 @@ if ! declare -p THREAD_POINTS >/dev/null 2>&1; then
   fi
 fi
 
-# Empty is intentional for unweighted graphs: their SSSP backend is not Delta-stepping.
 [[ ${FIXED_DELTA_WEIGHTED+x} ]] || experiment_die "spec must define FIXED_DELTA_WEIGHTED"
 [[ ${FIXED_DELTA_UNWEIGHTED+x} ]] || experiment_die "spec must define FIXED_DELTA_UNWEIGHTED"
 
@@ -150,9 +149,6 @@ if (( CUSTOM )); then
       candidate_base="${candidate_rel##*/}"
       selected=0
       for pattern in "${DATASET_PATTERNS[@]}"; do
-        # Match either the repository-relative graph path or its basename.
-        # Intentionally leave the pattern unquoted on the RHS of [[ == ]]
-        # so documented shell-style '*' wildcards work.
         if [[ "${candidate_rel}" == ${pattern} || "${candidate_base}" == ${pattern} ]]; then
           selected=1
           break
@@ -176,9 +172,6 @@ SUMMARY="${RESULTS_DIR}/runs.tsv"
 MANIFEST="${RESULTS_DIR}/manifest.txt"
 TSV_HEADER=$'experiment_id\tdescription\tgraph\tgraph_type\talgorithm\tk\tmode\tthreads\tdelta\tepsilon\trpp_token\trpp_value\trepetition\tseed\truntime_s\tnum_centers\tmax_dist_to_centers\tunreachable_vertices\tfallback_calls\tstatus\tlog'
 
-# Completed-run keys loaded from an existing runs.tsv in resume mode.  The key
-# deliberately includes the algorithm seed as well as repetition number so a
-# changed BASE_SEED cannot silently reuse incompatible results.
 declare -A COMPLETED_RUNS=()
 
 load_completed_runs() {
@@ -205,8 +198,6 @@ if (( RESUME )); then
   load_completed_runs "${SUMMARY}"
 fi
 
-# A dry-run must be completely read-only.  In particular, it must never erase
-# a partial real experiment by rewriting runs.tsv.
 if (( ! DRY_RUN )); then
   mkdir -p "${RESULTS_DIR}/raw"
 
@@ -300,7 +291,6 @@ run_one() {
     -seed "${seed}"
   )
 
-  # True single-core implementation, not the parallel implementation with one worker.
   if [[ "${mode}" == "singlecore" ]]; then
     cmd+=( -sc )
   # Delta-stepping is used only for weighted parallel SSSP.
@@ -405,8 +395,6 @@ expand_algorithm() {
 
     case "${sweep}" in
       delta)
-        # P1: explicitly vary Delta. This experiment contains only weighted
-        # parallel runs, so the values are passed through directly.
         deltas=( "${DELTA_VALUES[@]}" )
         epsilons=( "${FIXED_APPROX_EPSILON:-}" )
         rpps=( "" )
@@ -475,9 +463,6 @@ echo "Results: ${RESULTS_DIR}"
 echo
 
 for graph_case in "${GRAPH_CASES[@]}"; do
-  # Optional fourth field: n hint used only to resolve sqrt_n in a dry-run
-  # when the prepared graph is not present yet. Real executions always read n
-  # from the actual .adj header.
   IFS='|' read -r graph_rel graph_type k_csv graph_n_hint <<< "${graph_case}"
 
   local_k_values=()
@@ -495,8 +480,6 @@ for graph_case in "${GRAPH_CASES[@]}"; do
         k="$(resolve_k_token "${k_token}" "${graph}")" \
           || experiment_die "could not resolve k token '${k_token}' for ${graph_rel}"
       elif (( DRY_RUN )); then
-        # Resolve from a spec-provided n hint when available. This keeps
-        # dry-run output concrete without changing real execution semantics.
         if [[ -n "${graph_n_hint:-}" ]]; then
           k="$(awk -v n="${graph_n_hint}" 'BEGIN { printf "%d", sqrt(n) }')"
         else

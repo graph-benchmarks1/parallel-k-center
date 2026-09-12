@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Internal artifact validation spec: forced timeout.
-# Not part of any paper batch.
 
 EXPERIMENT_ID="validation_timeout"
 DESCRIPTION="Internal validation: force one run to time out"
