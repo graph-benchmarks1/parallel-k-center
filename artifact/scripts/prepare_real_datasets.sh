@@ -832,10 +832,13 @@ prepare_movielens() {
   local output_dir="${INPUT_DIR}/RatingNetworks_weighted"
   mkdir -p "${dataset_dir}" "${tmp_dir}" "${output_dir}"
 
-  # This URL currently points to the exact snapshot used in the experiments:
-  # ml-latest generated 2023-07-20 (33,832,162 ratings). The final graph
-  # validation below protects against a changed snapshot.
-  local source_url="https://files.grouplens.org/datasets/movielens/ml-latest.zip"
+  # Exact GroupLens MovieLens ml-latest snapshot used in the experiments.
+  # Snapshot generated 2023-07-20 (33,832,162 ratings).
+  # The archive is mirrored as a pinned GitHub release asset so the artifact
+  # does not depend on whatever version GroupLens may serve as "ml-latest"
+  # in the future.
+  local source_url="https://github.com/graph-benchmarks1/parallel-k-center/releases/download/artifact-data-v1/ml-latest.zip"
+  local expected_sha256="66a9e518c747d76b241d9a859b001a2619d3ed1672ceef599eb50daf73a7b4a3"
   local archive="${dataset_dir}/ml-latest.zip"
   local raw="${tmp_dir}/ratings.csv"
   local transformed="${tmp_dir}/movielens.transformed.tsv"
@@ -850,6 +853,7 @@ prepare_movielens() {
 
   echo "Real-data preparation: MovieLens"
   echo "  source:       GroupLens ml-latest, snapshot generated 2023-07-20"
+  echo "  mirror:       pinned artifact release asset"
   echo "  URL:          ${source_url}"
   echo "  transform:    weight = 11 - 2 * rating"
   echo "  bipartite:    movie IDs shifted by ${user_namespace_size}"
@@ -871,6 +875,18 @@ prepare_movielens() {
 
   rm -f "${raw}" "${transformed}" "${bipartite}" "${converted}" "${cleaned}"
   download_cached "${source_url}" "${archive}"
+  
+  echo
+  echo "[verify] MovieLens archive SHA-256"
+  actual_sha256="$(sha256sum "${archive}" | awk '{print $1}')"
+  if [[ "${actual_sha256}" != "${expected_sha256}" ]]; then
+    echo "ERROR: MovieLens archive checksum mismatch." >&2
+    echo "  expected: ${expected_sha256}" >&2
+    echo "  actual:   ${actual_sha256}" >&2
+    echo "  archive:  ${archive}" >&2
+    exit 1
+  fi
+  echo "  SHA-256 OK: ${actual_sha256}"
 
   echo
   echo "[extract] ml-latest/ratings.csv"
