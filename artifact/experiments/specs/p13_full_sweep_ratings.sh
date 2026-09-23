@@ -29,7 +29,7 @@ ALGORITHM_SWEEP_abboud="none"
 ALGORITHM_SWEEP_thorupsimple="none"
 
 GRAPH_CASES=(
-  "Snap_weighted/libimseti.adj|weighted|20,100,sqrt_n|220970"
-  "Snap_weighted/movielens.adj|weighted|20,100,sqrt_n|414214"
-  "Snap_weighted/yahoo-song.adj|weighted|20,100,500,sqrt_n|1625951"
+  "RatingNetworks_weighted/libimseti.adj|weighted|20,100,sqrt_n|220970"
+  "RatingNetworks_weighted/movielens.adj|weighted|20,100,sqrt_n|414214"
+  "RatingNetworks_weighted/yahoo-song.adj|weighted|20,100,500,sqrt_n|1625951"
 )
