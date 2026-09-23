@@ -307,6 +307,10 @@ The recommended workflow requires
 - Internet access for downloading the real-world datasets, and
 - sufficient disk space for the selected reproduction profile. (~300GB for the full experimental reproduction should be sufficient)
 
+The Docker image targets the Linux AMD64 (x86-64) architecture. On ARM64 hosts, including Apple Silicon Macs, 
+build the image using Docker's --platform linux/amd64 option. Keep in mind this uses architecture emulation, 
+so performance measurements on ARM64 hosts are not directly comparable to measurements on native AMD64 hardware.
+
 Large experiments may require substantial memory, disk space, and running time.
 For this reason, the artifact provides both manageable `light` profiles and
 the complete `full` reproduction.
@@ -316,7 +320,13 @@ the complete `full` reproduction.
 From the repository root, build the artifact image:
 
 ```bash
-docker build -f artifact/Dockerfile -t kcenter-ae .
+docker build --platform linux/amd64 -f artifact/Dockerfile -t kcenter-ae
+```
+
+On ARM64 hosts, also specify --platform linux/amd64 when running the image, for example:
+
+```bash
+docker run --rm --platform linux/amd64 kcenter-ae smoke
 ```
 
 First run the smoke test:
