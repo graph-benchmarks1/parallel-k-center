@@ -299,7 +299,7 @@ prepare_snap_unweighted() {
   local converted="${tmp_dir}/${dataset_name}.preclean.adj"
   local cleaned="${tmp_dir}/${dataset_name}.clean.adj"
 
-  local output_dir="${INPUT_DIR}/Snap_unweighted"
+  local output_dir="${INPUT_DIR}/SocialNetworks_unweighted"
   local final_graph="${output_dir}/${final_name}"
 
   mkdir -p "${dataset_dir}" "${tmp_dir}" "${output_dir}"

@@ -27,10 +27,10 @@ ALGORITHM_SWEEP_abboud="none"
 ALGORITHM_SWEEP_thorupsimple="none"
 
 GRAPH_CASES=(
-  "Snap_unweighted/com-dblp.adj|unweighted|20,100,sqrt_n|317080"
-  "Snap_unweighted/com-youtube.adj|unweighted|20,100,500,sqrt_n|1134890"
-  "Snap_unweighted/com-lj.adj|unweighted|20,100,500,sqrt_n|3997962"
-  "Snap_unweighted/com-orkut.adj|unweighted|20,100,500,sqrt_n|3072441"
-  "Snap_unweighted/twitter-2010.adj|unweighted|20,100,500,2000,sqrt_n|41652230"
-  "Snap_unweighted/com-friendster.adj|unweighted|20,100,500,2000,sqrt_n|65608366"
+  "SocialNetworks_unweighted/com-dblp.adj|unweighted|20,100,sqrt_n|317080"
+  "SocialNetworks_unweighted/com-youtube.adj|unweighted|20,100,500,sqrt_n|1134890"
+  "SocialNetworks_unweighted/com-lj.adj|unweighted|20,100,500,sqrt_n|3997962"
+  "SocialNetworks_unweighted/com-orkut.adj|unweighted|20,100,500,sqrt_n|3072441"
+  "SocialNetworks_unweighted/twitter-2010.adj|unweighted|20,100,500,2000,sqrt_n|41652230"
+  "SocialNetworks_unweighted/com-friendster.adj|unweighted|20,100,500,2000,sqrt_n|65608366"
 )

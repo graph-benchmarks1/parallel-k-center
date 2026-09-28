@@ -25,7 +25,7 @@ ALGORITHM_SWEEP_abboud="none"
 ALGORITHM_SWEEP_thorupsimple="none"
 
 GRAPH_CASES=(
-  "SocialNetworks_unweighted/livejournal.adj|unweighted|200,2000"
-  "SocialNetworks_unweighted/youtube.adj|unweighted|200,2000"
-  "SocialNetworks_unweighted/orkut.adj|unweighted|200,2000"
+  "SocialNetworks_unweighted/com-lj.adj|unweighted|200,2000"
+  "SocialNetworks_unweighted/com-youtube.adj|unweighted|200,2000"
+  "SocialNetworks_unweighted/com-orkut.adj|unweighted|200,2000"
 )

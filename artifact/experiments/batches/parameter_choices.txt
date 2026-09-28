@@ -1,0 +1,5 @@
+# Appendix A.6.1-A.6.3
+p1_delta
+p2_approx_epsilon_synthetic
+p3_approx_epsilon_real
+p4_thorup_rpp

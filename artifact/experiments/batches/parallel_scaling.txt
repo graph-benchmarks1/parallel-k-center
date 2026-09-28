@@ -1,0 +1,5 @@
+# Figures A.5, A.6, 7.1, 7.2
+p5_parallel_small_synthetic
+p6_parallel_large_synthetic
+p7_parallel_social
+p8_parallel_road

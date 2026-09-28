@@ -21,8 +21,8 @@ ALGORITHM_SWEEP_gonzalez="none"
 ALGORITHM_SWEEP_approximategonzalez="epsilon"
 
 GRAPH_CASES=(
-  "SocialNetworks_unweighted/livejournal.adj|unweighted|10,50,300,2000"
-  "SocialNetworks_unweighted/youtube.adj|unweighted|10,50,300,2000"
-  "SocialNetworks_unweighted/orkut.adj|unweighted|10,50,300,2000"
+  "SocialNetworks_unweighted/com-lj.adj|unweighted|10,50,300,2000"
+  "SocialNetworks_unweighted/com-youtube.adj|unweighted|10,50,300,2000"
+  "SocialNetworks_unweighted/com-orkut.adj|unweighted|10,50,300,2000"
   "RoadNetworks_weighted/USA-road-d.CTR.adj|weighted|10,50,300,2000"
 )

@@ -2,6 +2,8 @@
 *.swo
 *.swp
 *.txt
+!artifact/experiments/batches/
+!artifact/experiments/batches/*.txt
 
 *.a
 *.o

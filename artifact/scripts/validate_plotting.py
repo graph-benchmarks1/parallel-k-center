@@ -33,16 +33,16 @@ CASES = {
         ("","Snap_weighted/ER_large/er_n10000000_d4_seed0_w.adj","weighted",[20,100,500,3162]),
     ],
     "p11_full_sweep_social": [
-        ("Snap_unweighted/com-dblp.adj","", "unweighted",[20,100,563]),
-        ("Snap_unweighted/com-orkut.adj","", "unweighted",[20,100,500,1752]),
+        ("SocialNetworks_unweighted/com-dblp.adj","", "unweighted",[20,100,563]),
+        ("SocialNetworks_unweighted/com-orkut.adj","", "unweighted",[20,100,500,1752]),
     ],
     "p12_full_sweep_roads": [
-        ("Snap_weighted/USA-road-d.CTR.adj","", "weighted",[20,100,500,3700]),
-        ("Snap_weighted/USA-road-d.USA.adj","", "weighted",[20,100,500,5200]),
+        ("RoadNetworks_weighted/USA-road-d.CTR.adj","", "weighted",[20,100,500,3700]),
+        ("RoadNetworks_weighted/USA-road-d.USA.adj","", "weighted",[20,100,500,5200]),
     ],
     "p13_full_sweep_ratings": [
-        ("Snap_weighted/libimseti.adj","", "weighted",[20,100,470]),
-        ("Snap_weighted/yahoo-song.adj","", "weighted",[20,100,500,1275]),
+        ("RatingNetworks_weighted/libimseti.adj","", "weighted",[20,100,470]),
+        ("RatingNetworks_weighted/yahoo-song.adj","", "weighted",[20,100,500,1275]),
     ],
 }
 

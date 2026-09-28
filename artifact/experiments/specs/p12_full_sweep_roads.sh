@@ -29,6 +29,6 @@ ALGORITHM_SWEEP_abboud="none"
 ALGORITHM_SWEEP_thorupsimple="none"
 
 GRAPH_CASES=(
-  "Snap_weighted/USA-road-d.CTR.adj|weighted|20,100,500,3700|14081816"
-  "Snap_weighted/USA-road-d.USA.adj|weighted|20,100,500,5200|23947347"
+  "RoadNetworks_weighted/USA-road-d.CTR.adj|weighted|20,100,500,3700|14081816"
+  "RoadNetworks_weighted/USA-road-d.USA.adj|weighted|20,100,500,5200|23947347"
 )
