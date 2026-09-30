@@ -320,7 +320,7 @@ the complete `full` reproduction.
 From the repository root, build the artifact image:
 
 ```bash
-docker build --platform linux/amd64 -f artifact/Dockerfile -t kcenter-ae
+docker build --platform linux/amd64 -f artifact/Dockerfile -t kcenter-ae .
 ```
 
 On ARM64 hosts, also specify --platform linux/amd64 when running the image, for example:
